@@ -1,5 +1,27 @@
 workflows:
-  hello-world:
-    name: Hello world workflow
+  godot-android:
+    name: Godot Android Build
+    max_build_duration: 30
+    environment:
+      vars:
+        GODOT_VERSION: 4.1.1
+        GODOT_EXEC_URL: https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
+        GODOT_TEMPLATES_URL: https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_export_templates.tpz
     scripts:
-        - echo "Hello World!"
+      - name: Download Godot Engine
+        script: |
+          wget -O godot.zip ${GODOT_EXEC_URL}
+          unzip godot.zip
+          chmod +x Godot_v${GODOT_VERSION}-stable_linux.x86_64
+      - name: Install Export Templates
+        script: |
+          wget -O templates.tpz ${GODOT_TEMPLATES_URL}
+          unzip templates.tpz -d templates
+      - name: Restore export_presets.cfg
+        script: |
+          echo "$GODOT_EXPORT_PRESETS" | base64 -d > export_presets.cfg
+      - name: Build Android APK
+        script: |
+          ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless --export-release "Android" Out/UnderworldEmpire.apk
+    artifacts:
+      - pattern: Out/*.apk
