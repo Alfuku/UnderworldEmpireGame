@@ -1,0 +1,7 @@
+
+[application]
+config/name="Underworld Empire"
+run/main_scene="res://main.tscn"
+
+[rendering]
+quality/intended_usage/framebuffer_allocation=2
