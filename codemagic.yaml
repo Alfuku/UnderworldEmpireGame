@@ -11,11 +11,16 @@ workflows:
       - name: Download Godot Engine
         script: |
           wget -O godot.zip ${GODOT_EXEC_URL}
-          unzip godot.zip
-          chmod +x Godot_v${GODOT_VERSION}-stable_linux.x86_64
+          unzip godot.zip -d godot
+          chmod +x godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64
       - name: Install Export Templates
         script: |
           wget -O templates.tpz ${GODOT_TEMPLATES_URL}
-          unzip templates.tpz -d templates
-      - name: Restore export_presets.cfg
-        scrip
+          mkdir -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          unzip templates.tpz -d ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+      - name: Build Android APK
+        script: |
+          mkdir -p build
+          godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless --export-release "Android" build/UnderworldEmpire.apk
+    artifacts:
+      - build/UnderworldEmpire.apk
