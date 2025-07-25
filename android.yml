@@ -1,0 +1,30 @@
+name: Godot Android Build
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Godot
+      uses: firebelley/setup-godot@v1
+      with:
+        godot-version: '4.1.1'
+        export-templates-version: '4.1.1'
+
+    - name: Export Android Build
+      run: |
+        mkdir -p build/android
+        godot --headless --export-release "Android" build/android/UnderworldEmpire.apk
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: android-build
+        path: build/android/UnderworldEmpire.apk
