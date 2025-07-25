@@ -18,10 +18,4 @@ workflows:
           wget -O templates.tpz ${GODOT_TEMPLATES_URL}
           unzip templates.tpz -d templates
       - name: Restore export_presets.cfg
-        script: |
-          echo "$GODOT_EXPORT_PRESETS" | base64 -d > export_presets.cfg
-      - name: Build Android APK
-        script: |
-          ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless --export-release "Android" Out/UnderworldEmpire.apk
-    artifacts:
-      - pattern: Out/*.apk
+        scrip
